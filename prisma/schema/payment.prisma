@@ -1,0 +1,23 @@
+model Payment {
+  id            String         @id @default(uuid())
+  userId        String
+  user          User           @relation(fields: [userId], references: [id])
+  
+  amount        Float
+  currency      String         @default("BDT")
+  method        String         // BKASH, STRIPE, SSLCOMMERZ
+  status        PaymentStatus  @default(PENDING)
+  
+  // Payment gateway fields
+  transactionId String?        @unique
+  orderId       String?        @unique
+  gatewayResponse Json?        // Store raw response
+  
+  // For bill payment
+  billMonth     String?        // e.g., "2026-09"
+  
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  @@index([userId, status])
+}

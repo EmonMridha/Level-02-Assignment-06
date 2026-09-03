@@ -1,0 +1,35 @@
+model Outage {
+    id          String     @id @default(uuid())
+    type        OutageType
+    title       String
+    description String?
+    cause       String? // For unexpected outages
+
+    startTime DateTime
+    endTime   DateTime?
+    duration  Int? // In minutes
+
+    status   OutageStatus @default(SCHEDULED)
+    priority String       @default("MEDIUM")
+
+    zoneId String // Denormalized for faster queries
+    zone Zone   @relation(fields: [zoneId], references: [id])
+
+    createdById String
+    createdBy   User   @relation("CreatedOutages", fields: [createdById], references: [id])
+
+    // Technician assignment
+    assignedToId String?
+    assignedTo   User?     @relation("AssignedOutages", fields: [assignedToId], references: [id])
+    assignedAt   DateTime?
+    completedAt  DateTime?
+
+    complaints Complaint[]
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@index([zoneId, startTime])
+    @@index([status])
+    @@index([assignedToId])
+}

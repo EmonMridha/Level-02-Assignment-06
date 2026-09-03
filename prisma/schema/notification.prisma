@@ -1,0 +1,14 @@
+model Notification {
+  id            String   @id @default(uuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id])
+  
+  title         String
+  message       String
+  type          String   // OUTAGE_ALERT, COMPLAINT_UPDATE, PAYMENT, SYSTEM
+  isRead        Boolean  @default(false)
+  metadata      Json?    // Store related IDs
+  createdAt     DateTime @default(now())
+
+  @@index([userId, isRead])
+}
