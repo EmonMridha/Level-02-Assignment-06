@@ -20,10 +20,13 @@ app.use(cookieParser())
 
 app.get("/", async (req: Request, res: Response) => {
     const users = await prisma.user.findMany();
+
     if (users.length === 0) {
-        console.log('NO user found')
+        console.log("NO user found");
     }
-})
+
+    res.send("Prisma Press Backend is running");
+});
 
 app.use('/api/v1/auth', userRoutes)
 
