@@ -1,48 +1,47 @@
 model User {
-  id            String      @id @default(uuid())
-  email         String      @unique
-  password      String?     // Null for Google login users
-  name          String
-  phone         String?
-  role          Role        @default(CUSTOMER)
-  isActive      Boolean     @default(true)
-  
-  // Google OAuth
-  gcpId         String?     @unique
-  
-  // Relations
-  complaints    Complaint[]
-  payments      Payment[]
-  notifications Notification[]
-  createdOutages Outage[]   @relation("CreatedOutages")
-  assignedOutages Outage[]  @relation("AssignedOutages")
-  
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @updatedAt
-}
+  id       String  @id @default(uuid())
+  email    String  @unique
+  password String? // Null for Google login users
+  name     String
+  phone    String?
+  role     Role    @default(CUSTOMER)
+  isActive Boolean @default(true)
 
+  // Google OAuth
+  gcpId String? @unique
+
+  // Relations
+  complaints      Complaint[]
+  payments        Payment[]
+  notifications   Notification[]
+  createdOutages  Outage[]       @relation("CreatedOutages")
+  assignedOutages Outage[]       @relation("AssignedOutages")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
 
 enum Role {
   ADMIN
-  OPERATOR      // Can manage outages
-  CUSTOMER      // End user
+  OPERATOR // Can manage outages
+  CUSTOMER // End user
 }
 
 enum OutageType {
-  SCHEDULED     // Planned load shedding
-  UNEXPECTED    // Unplanned/fault
+  SCHEDULED // Planned load shedding
+  UNEXPECTED // Unplanned/fault
 }
 
 enum OutageStatus {
-  SCHEDULED     // Planned but not started
-  ACTIVE        // Currently happening
-  RESOLVED      // Power restored
-  CANCELLED     // Cancelled
+  SCHEDULED // Planned but not started
+  ACTIVE // Currently happening
+  RESOLVED // Power restored
+  CANCELLED // Cancelled
 }
 
 enum ComplaintStatus {
   PENDING
-  ASSIGNED      // Technician assigned
+  ASSIGNED // Technician assigned
   RESOLVED
   REJECTED
 }
