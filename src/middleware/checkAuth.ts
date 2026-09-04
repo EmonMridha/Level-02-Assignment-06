@@ -40,6 +40,7 @@ export const auth = (...requiredRoles: Role[]) => {
             );
         }
 
+        // finding the owner of the token 
         const verifiedToken = jwtUtils.verifyToken(token, config.jwt_access_secret);
 
         if (!verifiedToken.success) {
@@ -55,6 +56,7 @@ export const auth = (...requiredRoles: Role[]) => {
             );
         }
 
+        // finding the user in the database
         const user = await prisma.user.findUnique({
             where: {
                 id: userId,
@@ -66,13 +68,6 @@ export const auth = (...requiredRoles: Role[]) => {
 
         if (!user) {
             throw new AppError(httpStatus.UNAUTHORIZED, "User not found. Please log in again.");
-        }
-
-        if (user.status === "BLOCKED") {
-            throw new AppError(
-                httpStatus.FORBIDDEN,
-                "Your account has been blocked. Please contact support.",
-            );
         }
 
         req.user = {
