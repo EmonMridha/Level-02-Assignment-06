@@ -16,6 +16,11 @@ export interface IUser {
   updatedAt: Date;
 }
 
+export interface ILogin {
+  email: string;
+  password: string;
+}
+
 export enum Role {
   CUSTOMER = "CUSTOMER",
   // Add other roles as needed
@@ -41,3 +46,4 @@ export interface Outage {
   id: string;
   // ... other fields
 }
+
