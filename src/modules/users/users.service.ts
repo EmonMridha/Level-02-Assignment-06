@@ -55,6 +55,20 @@ const loginUser = async (payload: ILogin) => {
         throw new AppError(httpStatus.NOT_FOUND, "User Not Found")
     }
 
+    if (!user.isActive) {
+        throw new AppError(
+            httpStatus.FORBIDDEN,
+            "Your account is inactive"
+        );
+    }
+
+    if (!user.password) {
+        throw new AppError(
+            httpStatus.UNAUTHORIZED,
+            "Please login using Google"
+        );
+    }
+
     // matching password
     const isPasswordMatched = await bcrypt.compare(
         password,
@@ -72,7 +86,6 @@ const loginUser = async (payload: ILogin) => {
         email: user.email,
         role: user.role,
     };
-
 
     // Creating accessToken
     const accessToken = jwtUtils.createToken(
@@ -198,25 +211,37 @@ const googleLogin = async (payload: IGoogleLoginPayload) => {
         throw new AppError(httpStatus.BAD_REQUEST, "Invalid google id token payload")
     }
 
-    const ifUserExists = await prisma.user.findUnique({
+    // finding the user by google id token in database
+    const existingGoogleUser = await prisma.user.findUnique({
         where: {
-            gcpId: googleIdTokenPayload.sub,
-        },
+            gcpId: googleIdTokenPayload.sub
+        }
     });
-    let user;
 
-    if (ifUserExists) {
-        user = ifUserExists;
-    } else {
+    let user = existingGoogleUser
+
+    if (!user) {
+
+        // finding the user by google verified email in database
+        const existingEmailUser = await prisma.user.findUnique({
+            where: {
+                email: googleIdTokenPayload.email,
+            }
+        });
+
+        if (existingEmailUser) {
+            throw new AppError(
+                httpStatus.CONFLICT,
+                "An account with this email already exists. Please login with email and password."
+            );
+        }
+
         user = await prisma.user.create({
             data: {
-                name: googleIdTokenPayload.name as string,
-                email: googleIdTokenPayload.email as string,
-                gcpId: googleIdTokenPayload.sub as string,
+                name: googleIdTokenPayload.name,
+                email: googleIdTokenPayload.email,
+                gcpId: googleIdTokenPayload.sub,
                 role: Role.CUSTOMER,
-            },
-            omit: {
-                password: true,
             },
         });
     }
