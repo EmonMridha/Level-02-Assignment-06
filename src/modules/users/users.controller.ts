@@ -3,6 +3,7 @@ import { catchAsync } from "../../utils/catchAsync";
 import { userService } from "./users.service";
 import { sendResponse } from "../../utils/SendResponse";
 import httpStatus from "http-status"
+import { AppError } from "../../utils/AppError";
 
 const createUser = catchAsync(async (req: Request, res: Response) => {
     const payload = req.body;
@@ -21,7 +22,7 @@ const loginUser = catchAsync(async (req: Request, res: Response) => {
     const payload = req.body;
     const result = await userService.loginUser(payload);
     const { accessToken, refreshToken } = result;
-    console.log(accessToken,refreshToken);
+    console.log(accessToken, refreshToken);
 
     // setting the accessToken in the cookie
     res.cookie("accessToken", accessToken, {
@@ -50,7 +51,57 @@ const loginUser = catchAsync(async (req: Request, res: Response) => {
     });
 });
 
+const getMe = catchAsync(async (req: Request, res: Response) => {
+    const user = req.user;
+
+    const result = await userService.getMe(user)
+
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: "Your data retrieved successfully",
+        data: result
+    });
+})
+
+const refreshToken = catchAsync(async (req: Request, res: Response) => {
+    if (!req.cookies.refreshToken) {
+        throw new AppError(httpStatus.UNAUTHORIZED, "Refresh token is missing");
+    }
+
+    const result = await userService.refreshToken(req.cookies.refreshToken);
+    const { accessToken, refreshToken: newRefreshToken } = result;
+
+    res.cookie("accessToken", accessToken, {
+        httpOnly: true,
+        secure: false,
+        sameSite: "none",
+        maxAge: 1000 * 60 * 60 * 24, // 24 hour or 1 day
+    });
+
+    res.cookie("refreshToken", newRefreshToken, {
+        httpOnly: true,
+        secure: false,
+        sameSite: "none",
+        maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
+    });
+
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: "New tokens generated successfully",
+        data: {
+            accessToken,
+            refreshToken: newRefreshToken,
+        },
+    });
+
+})
+
+
 export const userController = {
     createUser,
-    loginUser
+    loginUser,
+    getMe,
+    refreshToken
 }

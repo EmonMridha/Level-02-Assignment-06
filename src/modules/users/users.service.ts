@@ -5,7 +5,7 @@ import { ILogin, IUser } from "./users.interface"
 import httpStatus from "http-status";
 import { jwtUtils } from "../../utils/jwt";
 import config from "../../config";
-import { SignOptions } from "jsonwebtoken";
+import { JwtPayload, SignOptions } from "jsonwebtoken";
 
 const createUser = async (payload: IUser) => {
 
@@ -92,7 +92,87 @@ const loginUser = async (payload: ILogin) => {
 
 }
 
+const getMe = async (user: any) => {
+    const isUserExists = await prisma.user.findUnique({
+        where: {
+            email: user.email
+        },
+        omit: {
+            password: true
+        }
+    });
+
+    if (!isUserExists) {
+        throw new AppError(httpStatus.NOT_FOUND, "User not found");
+    }
+
+    return isUserExists;
+}
+
+const refreshToken = async (oldRefreshToken: string) => {
+    // finding the owner of the refreshToken
+    const verifiedRefreshToken = jwtUtils.verifyToken(
+        oldRefreshToken,
+        config.jwt_refresh_secret,
+    );
+
+    if (!verifiedRefreshToken.success || !verifiedRefreshToken.data) {
+        throw new AppError(
+            httpStatus.UNAUTHORIZED,
+            config.node_env === "development"
+                ? verifiedRefreshToken.error
+                : "Invalid refresh token",
+        );
+    }
+
+    const data = verifiedRefreshToken.data as JwtPayload;
+
+    // finding the owner info in the database
+    const user = await prisma.user.findUnique({
+        where: { id: data.userId },
+    });
+
+    if (!user) {
+        throw new AppError(httpStatus.UNAUTHORIZED, "User is inactive or not found");
+    }
+
+    if (!user.isActive) {
+        throw new AppError(
+            httpStatus.FORBIDDEN,
+            "Your account is inactive",
+        );
+    }
+
+    const jwtPayload = {
+        userId: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+    };
+
+    // creating new accessToken
+    const accessToken = jwtUtils.createToken(
+        jwtPayload,
+        config.jwt_access_secret,
+        config.jwt_access_expires_in as SignOptions,
+    );
+
+    // creating new refreshToken
+    const refreshToken = jwtUtils.createToken(
+        jwtPayload,
+        config.jwt_refresh_secret,
+        config.jwt_refresh_expires_in as SignOptions,
+    );
+
+    return {
+        accessToken,
+        refreshToken,
+    };
+
+}
 export const userService = {
     createUser,
-    loginUser
+    loginUser,
+    getMe,
+    refreshToken
 }
