@@ -10,5 +10,5 @@ router.post('/register', validateRequest(registerSchema), userController.createU
 router.post('/login', validateRequest(LoginZodSchema),userController.loginUser)
 router.get('/me', auth("ADMIN","OPERATOR","CUSTOMER"),userController.getMe)
 router.post('/refresh-token', userController.refreshToken)
-
+router.post("/logout", userController.logoutUser);
 export const userRoutes = router

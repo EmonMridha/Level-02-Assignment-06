@@ -170,6 +170,12 @@ const refreshToken = async (oldRefreshToken: string) => {
     };
 
 }
+
+const googleLogin = async(payload: any) => {
+    
+}
+
+
 export const userService = {
     createUser,
     loginUser,
