@@ -5,6 +5,6 @@ import { zoneController } from "./zone.controller";
 
 const router = Router();
 
-router.post('/zone', validateRequest(createZoneSchema), zoneController.createZone)
+router.post('/', validateRequest(createZoneSchema), zoneController.createZone)
 
-export const userRoutes = router
+export const zoneRoutes = router
