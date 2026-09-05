@@ -7,8 +7,9 @@ import { auth } from "../../middleware/checkAuth";
 const router = Router();
 
 router.post('/register', validateRequest(registerSchema), userController.createUser)
-router.post('/login', validateRequest(LoginZodSchema),userController.loginUser)
-router.get('/me', auth("ADMIN","OPERATOR","CUSTOMER"),userController.getMe)
+router.post('/login', validateRequest(LoginZodSchema), userController.loginUser)
+router.get('/me', auth("ADMIN", "OPERATOR", "CUSTOMER"), userController.getMe)
 router.post('/refresh-token', userController.refreshToken)
 router.post("/logout", userController.logoutUser);
+router.post('/google-login', userController.googleLogin)
 export const userRoutes = router

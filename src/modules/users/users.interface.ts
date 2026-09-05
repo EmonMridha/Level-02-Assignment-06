@@ -26,6 +26,10 @@ export enum Role {
   // Add other roles as needed
 }
 
+export interface IGoogleLoginPayload {
+  idToken: string
+}
+
 // Define these interfaces based on your other schemas
 export interface Complaint {
   id: string;
