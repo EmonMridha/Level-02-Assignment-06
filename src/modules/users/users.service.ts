@@ -200,12 +200,9 @@ const googleLogin = async (payload: IGoogleLoginPayload) => {
 
     const ifUserExists = await prisma.user.findUnique({
         where: {
-            email: googleIdTokenPayload.email,
-            role: Role.CUSTOMER,
             gcpId: googleIdTokenPayload.sub,
         },
     });
-
     let user;
 
     if (ifUserExists) {
