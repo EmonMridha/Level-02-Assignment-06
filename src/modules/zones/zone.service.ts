@@ -1,5 +1,7 @@
 import { prisma } from "../../lib/prisma"
-import { ICreateZone } from "./zone.interface"
+import { AppError } from "../../utils/AppError"
+import { ICreateZone, IUpdateZone } from "./zone.interface"
+import httpStatus from 'http-status'
 
 const createZone = async (payload: ICreateZone) => {
 
@@ -31,9 +33,42 @@ const getZoneById = async (zoneId: string) => {
     return result;
 }
 
+const updateZone = async (id: string, payload: IUpdateZone) => {
+    const result = await prisma.zone.update({
+        where: { id },
+        data: payload,
+    });
+
+    return result;
+};
+
+// Soft Delete the zone
+const deleteZone = async (id: string) => {
+    const zone = await prisma.zone.findUnique({
+        where: { id },
+    });
+
+    if (!zone) {
+        throw new AppError(
+            httpStatus.NOT_FOUND,
+            "Zone not found"
+        );
+    }
+
+    const result = await prisma.zone.update({
+        where: { id },
+        data: {
+            deletedAt: new Date(),
+        },
+    });
+
+    return result;
+};
 
 export const zoneService = {
     createZone,
     getAllZones,
-    getZoneById
+    getZoneById,
+    updateZone,
+    deleteZone
 }

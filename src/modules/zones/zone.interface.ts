@@ -13,3 +13,10 @@ export interface ICreateZone {
     code: string;
     description?: string;
 }
+
+export interface IUpdateZone {
+    name?: string;
+    code?: string;
+    description?: string;
+    isActive?: boolean;
+}
