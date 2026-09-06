@@ -7,6 +7,7 @@ import { prisma } from "./lib/prisma";
 import { userRoutes } from "./modules/users/user.route";
 import { globalErrorHandler } from "./middleware/globalErrorHandler";
 import { zoneRoutes } from "./modules/zones/zone.route";
+import { outageRoutes } from "./modules/outage/outage.route";
 
 const app: Application = express()
 
@@ -31,6 +32,7 @@ app.get("/", async (req: Request, res: Response) => {
 
 app.use('/api/v1/auth', userRoutes)
 app.use('/api/v1/zone', zoneRoutes)
+app.use('/api/v1/outage', outageRoutes)
 
 app.use(globalErrorHandler)
 
