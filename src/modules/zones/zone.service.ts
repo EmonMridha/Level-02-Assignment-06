@@ -16,7 +16,14 @@ const createZone = async (payload: ICreateZone) => {
     return result
 }
 
+const getAllZones = async () => {
+    const result = await prisma.zone.findMany();
+
+    return result;
+}
+
 
 export const zoneService = {
-    createZone
+    createZone,
+    getAllZones
 }
