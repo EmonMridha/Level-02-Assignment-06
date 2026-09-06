@@ -64,8 +64,22 @@ const getOutageById = catchAsync(async (req: Request, res: Response) => {
     });
 })
 
+const updateOutage = catchAsync(async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const payload = req.body;
+    const result = await outageService.updateOutage(id as string, payload)
+
+    sendResponse(res, {
+        statusCode: httpStatus.CREATED,
+        success: true,
+        message: "Outage updated successfully",
+        data: result,
+    });
+})
+
 export const outageController = {
     createOutage,
     getAllOutages,
-    getOutageById
+    getOutageById,
+    updateOutage
 }

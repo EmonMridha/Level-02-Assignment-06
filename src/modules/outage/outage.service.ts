@@ -2,7 +2,7 @@
 import { Prisma } from "../../../generated/prisma/client";
 import { OutageStatus, OutageType } from "../../../generated/prisma/enums";
 import { prisma } from "../../lib/prisma"
-import { ICreateOutage } from "./outage.interface"
+import { ICreateOutage, IUpdateOutage } from "./outage.interface"
 
 const createOutage = async (payload: ICreateOutage, createdById: string) => {
     const { type, title, description, cause, startTime, endTime, duration, priority, zoneId, } = payload;
@@ -96,8 +96,22 @@ const getOutageById = async (id: string) => {
     return result;
 }
 
+const updateOutage = async (id: string, payload: IUpdateOutage) => {
+    const result = await prisma.outage.update({
+        where: {
+            id
+        },
+        data: {
+            ...payload
+        }
+    })
+
+    return result
+}
+
 export const outageService = {
     createOutage,
     getAllOutages,
-    getOutageById
+    getOutageById,
+    updateOutage
 }
