@@ -84,7 +84,20 @@ const getAllOutages = async (
     return result;
 };
 
+const getOutageById = async (id: string) => {
+    const result = await prisma.outage.findUnique({
+        where: { id },
+        include: {
+            zone: true,
+            createdBy: true,
+        },
+    });
+
+    return result;
+}
+
 export const outageService = {
     createOutage,
-    getAllOutages
+    getAllOutages,
+    getOutageById
 }

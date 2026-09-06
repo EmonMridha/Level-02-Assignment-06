@@ -34,14 +34,14 @@ const getAllOutages = catchAsync(async (req: Request, res: Response) => {
 
 
     const result = await outageService.getAllOutages(page,
-    limit,
-    status,
-    type,
-    priority,
-    zoneId,
-    sortBy,
-    sortOrder,
-    search
+        limit,
+        status,
+        type,
+        priority,
+        zoneId,
+        sortBy,
+        sortOrder,
+        search
     );
 
     sendResponse(res, {
@@ -52,7 +52,20 @@ const getAllOutages = catchAsync(async (req: Request, res: Response) => {
     });
 })
 
+const getOutageById = catchAsync(async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const result = await outageService.getOutageById(id as string);
+
+    sendResponse(res, {
+        statusCode: httpStatus.CREATED,
+        success: true,
+        message: "Outage fetched successfully",
+        data: result,
+    });
+})
+
 export const outageController = {
     createOutage,
-    getAllOutages
+    getAllOutages,
+    getOutageById
 }
