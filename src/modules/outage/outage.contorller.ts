@@ -23,18 +23,26 @@ const getAllOutages = catchAsync(async (req: Request, res: Response) => {
     const page = Number(req.query.page) || 1;
     const limit = Number(req.query.limit) || 10;
 
+    const sortBy = req.query.sortBy as string || "createdAt";
+    const sortOrder = req.query.sortOrder as "asc" | "desc" || "desc";
+
     const status = req.query.status as OutageStatus | undefined;
     const type = req.query.type as OutageType | undefined;
     const priority = req.query.priority as string | undefined;
     const zoneId = req.query.zoneId as string | undefined;
+    const search = req.query.search as string | undefined;
 
 
     const result = await outageService.getAllOutages(page,
-        limit,
-        status,
-        type,
-        priority,
-        zoneId);
+    limit,
+    status,
+    type,
+    priority,
+    zoneId,
+    sortBy,
+    sortOrder,
+    search
+    );
 
     sendResponse(res, {
         statusCode: httpStatus.CREATED,

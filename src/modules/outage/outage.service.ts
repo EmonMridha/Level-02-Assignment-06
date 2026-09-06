@@ -1,3 +1,5 @@
+
+import { Prisma } from "../../../generated/prisma/client";
 import { OutageStatus, OutageType } from "../../../generated/prisma/enums";
 import { prisma } from "../../lib/prisma"
 import { ICreateOutage } from "./outage.interface"
@@ -29,21 +31,50 @@ const getAllOutages = async (
     status?: OutageStatus,
     type?: OutageType,
     priority?: string,
-    zoneId?: string
+    zoneId?: string,
+    sortBy: string = "createdAt",
+    sortOrder: "asc" | "desc" = "desc",
+    search?: string
 ) => {
     const skip = (page - 1) * limit;
 
-    const where = {
+    const where: Prisma.OutageWhereInput = {
         ...(status && { status }),
         ...(type && { type }),
         ...(priority && { priority }),
         ...(zoneId && { zoneId }),
+
+        ...(search && {
+            OR: [
+                {
+                    title: {
+                        contains: search,
+                        mode: "insensitive",
+                    },
+                },
+                {
+                    description: {
+                        contains: search,
+                        mode: "insensitive",
+                    },
+                },
+                {
+                    cause: {
+                        contains: search,
+                        mode: "insensitive",
+                    },
+                },
+            ],
+        }),
     };
 
     const result = await prisma.outage.findMany({
         where,
         skip,
         take: limit,
+        orderBy: {
+            [sortBy]: sortOrder,
+        },
         include: {
             zone: true,
             createdBy: true,
