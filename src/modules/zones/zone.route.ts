@@ -8,5 +8,6 @@ const router = Router();
 
 router.post('/', auth('ADMIN'), validateRequest(createZoneSchema), zoneController.createZone)
 router.get('/', auth('ADMIN'), zoneController.getAllZones)
+router.get('/:id', auth('ADMIN'), zoneController.getZoneById)
 
 export const zoneRoutes = router

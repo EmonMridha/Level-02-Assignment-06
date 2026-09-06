@@ -29,8 +29,21 @@ const getAllZones = catchAsync(async (req: Request, res: Response) => {
     });
 })
 
+const getZoneById = catchAsync(async (req: Request, res: Response) => {
+
+    const id = req.params.id; // getting id from url
+    const result = await zoneService.getZoneById(id as string)
+
+    sendResponse(res, {
+        statusCode: httpStatus.CREATED,
+        success: true,
+        message: "User logged out successfully",
+        data: result,
+    });
+})
+
 export const zoneController = {
     createZone,
     getAllZones,
-
+    getZoneById
 }

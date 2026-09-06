@@ -22,8 +22,18 @@ const getAllZones = async () => {
     return result;
 }
 
+const getZoneById = async (zoneId: string) => {
+    const result = await prisma.zone.findUnique({
+        where: {
+            id: zoneId
+        }
+    })
+    return result;
+}
+
 
 export const zoneService = {
     createZone,
-    getAllZones
+    getAllZones,
+    getZoneById
 }
