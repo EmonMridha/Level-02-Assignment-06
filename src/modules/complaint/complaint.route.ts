@@ -9,5 +9,7 @@ const router = Router();
 router.post('/', auth('ADMIN', 'CUSTOMER', 'OPERATOR'), validateRequest(createComplaintSchema), complaintController.createComplaint)
 router.get('/', auth('ADMIN', 'CUSTOMER', 'OPERATOR'), complaintController.getAllComplaints)
 router.get('/:id', auth('ADMIN', 'CUSTOMER', 'OPERATOR'), complaintController.getComplaintById)
+router.patch('/:id', auth('ADMIN', 'CUSTOMER', 'OPERATOR'), complaintController.updateComplaint)
+
 
 export const complaintRoutes = router

@@ -1,5 +1,5 @@
 import { prisma } from "../../lib/prisma";
-import { ICreateComplaint } from "./complaint.interface";
+import { ICreateComplaint, IUpdateComplaint } from "./complaint.interface";
 
 const createComplaint = async (payload: ICreateComplaint, userId: string
 ) => {
@@ -34,10 +34,30 @@ const getComplaintById = async (id: string) => {
     return result
 }
 
+const updateComplaint = async (
+    id: string,
+    payload: IUpdateComplaint
+) => {
+    const result = await prisma.complaint.update({
+        where: {
+            id,
+        },
+        data: {
+            ...payload,
+            ...(payload.status === "RESOLVED" && {
+                resolvedAt: new Date(),
+            }),
+        },
+    });
+
+    return result;
+};
+
 const complaintService = {
     createComplaint,
     getAllComplaints,
-    getComplaintById
+    getComplaintById,
+    updateComplaint
 };
 
 export default complaintService;

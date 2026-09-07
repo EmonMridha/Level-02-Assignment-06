@@ -42,8 +42,22 @@ const getComplaintById = catchAsync(async (req: Request, res: Response) => {
     });
 })
 
+const updateComplaint = catchAsync(async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const payload = req.body;
+    const result = await complaintService.updateComplaint(id as string, payload)
+
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: "Complaint updated successfully",
+        data: result
+    });
+})
+
 export const complaintController = {
     createComplaint,
     getAllComplaints,
-    getComplaintById
+    getComplaintById,
+    updateComplaint
 }
