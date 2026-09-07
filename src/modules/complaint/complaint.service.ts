@@ -24,9 +24,20 @@ const getAllComplaints = async () => {
     return result
 }
 
+const getComplaintById = async (id: string) => {
+    const result = await prisma.complaint.findUnique({
+        where: {
+            id
+        }
+    })
+
+    return result
+}
+
 const complaintService = {
     createComplaint,
-    getAllComplaints
+    getAllComplaints,
+    getComplaintById
 };
 
 export default complaintService;

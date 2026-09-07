@@ -6,7 +6,8 @@ import { createComplaintSchema } from "./complaint.validation";
 
 const router = Router();
 
-router.post('/', auth('ADMIN','CUSTOMER','OPERATOR'),validateRequest(createComplaintSchema), complaintController.createComplaint)
-router.get('/', auth('ADMIN','CUSTOMER','OPERATOR'), complaintController.getAllComplaints)
+router.post('/', auth('ADMIN', 'CUSTOMER', 'OPERATOR'), validateRequest(createComplaintSchema), complaintController.createComplaint)
+router.get('/', auth('ADMIN', 'CUSTOMER', 'OPERATOR'), complaintController.getAllComplaints)
+router.get('/:id', auth('ADMIN', 'CUSTOMER', 'OPERATOR'), complaintController.getComplaintById)
 
 export const complaintRoutes = router

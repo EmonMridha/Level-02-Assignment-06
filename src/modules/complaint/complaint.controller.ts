@@ -29,7 +29,21 @@ const getAllComplaints = catchAsync(async (req: Request, res: Response) => {
     });
 })
 
+const getComplaintById = catchAsync(async (req: Request, res: Response) => {
+    const { id } = req.params;
+
+    const result = await complaintService.getComplaintById(id as string)
+
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: "Complaint fetched successfully",
+        data: result
+    });
+})
+
 export const complaintController = {
     createComplaint,
-    getAllComplaints
+    getAllComplaints,
+    getComplaintById
 }
