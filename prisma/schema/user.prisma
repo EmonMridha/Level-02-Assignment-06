@@ -8,7 +8,7 @@ model User {
   isActive Boolean @default(true)
 
   // Google OAuth
-  gcpId String? @unique
+  gcpId            String? @unique
 
   // Relations
   complaints      Complaint[]

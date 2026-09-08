@@ -17,6 +17,19 @@ const createCheckoutSession = catchAsync(async (req: Request, res: Response) => 
 
 })
 
+const verifyPayment = catchAsync(async (req: Request, res: Response) => {
+    const { sessionId,month} = req.body;
+    const { userId } = req.user as { userId: string }
+    const result = await paymentService.verifyPayment(userId,sessionId,month)
+
+    sendResponse(res, {
+        statusCode: httpStatus.CREATED,
+        success: true,
+        message: "Payment verified successfully",
+        data: result,
+    });
+});
 export const paymentController = {
-    createCheckoutSession
+    createCheckoutSession,
+    verifyPayment
 }
