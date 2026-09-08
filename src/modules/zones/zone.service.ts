@@ -19,10 +19,16 @@ const createZone = async (payload: ICreateZone) => {
 }
 
 const getAllZones = async () => {
-    const result = await prisma.zone.findMany();
+
+    const result = await prisma.zone.findMany({
+        where: {
+            deletedAt: null
+        }
+    });
 
     return result;
-}
+
+};
 
 const getZoneById = async (zoneId: string) => {
     const result = await prisma.zone.findUnique({

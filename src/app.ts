@@ -12,17 +12,34 @@ import { complaintRoutes } from "./modules/complaint/complaint.route";
 import { paymentRoutes } from "./modules/payment/payment.route"; import { notificationRoutes } from "./modules/notification/notification.route";
 import { adminRoutes } from "./modules/admin/admin.route";
 import { auditLogRoutes } from "./modules/audit/audit.route";
+import helmet from "helmet";
+
+import rateLimit from "express-rate-limit";
+
+const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 100,
+    message: {
+        success: false,
+        message: "Too many requests, please try again later",
+        errors: []
+    }
+});
 
 const app: Application = express()
+
+app.use(helmet())
 
 app.use(cors({
     origin: config.app_url,
     credentials: true
 }))
 
+app.use("/api", limiter);
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(cookieParser())
+
 
 app.get("/", async (req: Request, res: Response) => {
     const users = await prisma.user.findMany();
