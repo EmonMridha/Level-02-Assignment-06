@@ -198,7 +198,7 @@ prisma db seed  # Must run explicitly
 
 ## Prisma.validator
 
-The `prisma-client` generator no longer exposes `Prisma.validator`. Use TypeScript's `satisfies` operator instead.
+The `prisma-client` generator no longer exposes `Prisma.validator`. Use TypeScript's `satisfies` OPERATOR instead.
 
 ```typescript
 import { Prisma } from '../generated/prisma/client'

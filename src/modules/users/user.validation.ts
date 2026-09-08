@@ -24,3 +24,7 @@ export const LoginZodSchema = z.object({
         .string()
         .min(4, "Password Must Minimum 8 Characters Long.")
 });
+
+export const googleLoginSchema = z.object({
+    idToken: z.string().min(1, "Google ID token is required"),
+});

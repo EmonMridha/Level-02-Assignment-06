@@ -1,6 +1,6 @@
 ---
 name: prisma-client-api
-description: Prisma Client API reference covering model queries, filters, operators, and client methods. Use when writing database queries, using CRUD operations, filtering data, or configuring Prisma Client. Triggers on "prisma query", "findMany", "create", "update", "delete", "$transaction".
+description: Prisma Client API reference covering model queries, filters, OPERATORs, and client methods. Use when writing database queries, using CRUD operations, filtering data, or configuring Prisma Client. Triggers on "prisma query", "findMany", "create", "update", "delete", "$transaction".
 license: MIT
 metadata:
   author: prisma
@@ -39,7 +39,7 @@ Reference this skill when:
 - `constructor` - `PrismaClient` setup, adapter wiring, logging, and SQL commenter plugins
 - `model-queries` - CRUD operations and bulk operations
 - `query-options` - `select`, `include`, `omit`, sort, pagination
-- `filters` - scalar and logical filter operators
+- `filters` - scalar and logical filter OPERATORs
 - `relations` - relation reads and nested writes
 - `transactions` - array and interactive transaction patterns
 - `raw-queries` - `$queryRaw` and `$executeRaw` safety
@@ -173,16 +173,16 @@ Detailed API documentation:
 references/constructor.md        - PrismaClient constructor options
 references/model-queries.md      - CRUD operations
 references/query-options.md      - select, include, omit, where, orderBy
-references/filters.md            - Filter conditions and operators
+references/filters.md            - Filter conditions and OPERATORs
 references/relations.md          - Relation queries and nested operations
 references/transactions.md       - Transaction API
 references/raw-queries.md        - $queryRaw, $executeRaw
 references/client-methods.md     - $connect, $disconnect, $on, $extends
 ```
 
-## Filter Operators
+## Filter OPERATORs
 
-| Operator | Description |
+| OPERATOR | Description |
 |----------|-------------|
 | `equals` | Exact match |
 | `not` | Not equal |
@@ -197,7 +197,7 @@ references/client-methods.md     - $connect, $disconnect, $on, $extends
 
 ## Relation Filters
 
-| Operator | Description |
+| OPERATOR | Description |
 |----------|-------------|
 | `some` | At least one related record matches |
 | `every` | All related records match |

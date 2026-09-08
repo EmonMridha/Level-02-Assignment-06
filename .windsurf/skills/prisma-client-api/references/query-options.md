@@ -167,7 +167,7 @@ const users = await prisma.user.findMany({
 })
 ```
 
-See `filters.md` for detailed filter operators.
+See `filters.md` for detailed filter OPERATORs.
 
 ## orderBy
 

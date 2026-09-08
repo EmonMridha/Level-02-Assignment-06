@@ -1,6 +1,6 @@
-# Filter Conditions and Operators
+# Filter Conditions and OPERATORs
 
-Filter operators for the `where` clause.
+Filter OPERATORs for the `where` clause.
 
 ## Equality
 
@@ -78,7 +78,7 @@ where: { deletedAt: { not: null } }
 where: { middleName: { isSet: true } }
 ```
 
-## Logical Operators
+## Logical OPERATORs
 
 ### AND (implicit)
 

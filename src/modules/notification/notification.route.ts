@@ -10,10 +10,10 @@ router.post('/', auth('ADMIN'), validateRequest(createNotificationSchema), notif
 
 router.get('/', notificationController.getNotification)
 
-router.patch("/read-all", auth('ADMIN', 'CUSTOMER', 'OPERATOR'), notificationController.markAllAsRead
+router.patch("/read-all", auth('ADMIN', 'CUSTOMER', 'TECHNICIAN'), notificationController.markAllAsRead
 );
 
-router.patch("/:id/read", auth('ADMIN', 'CUSTOMER', 'OPERATOR'), notificationController.markAsRead
+router.patch("/:id/read", auth('ADMIN', 'CUSTOMER', 'TECHNICIAN'), notificationController.markAsRead
 );
 
 export const notificationRoutes = router

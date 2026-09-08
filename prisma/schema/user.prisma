@@ -24,7 +24,7 @@ model User {
 
 enum Role {
   ADMIN
-  OPERATOR // Can manage outages
+  TECHNICIAN // Can manage outages
   CUSTOMER // End user
 }
 
@@ -42,7 +42,7 @@ enum OutageStatus {
 
 enum ComplaintStatus {
   PENDING
-  ASSIGNED // Technician assigned
+  ASSIGNED // OPERATOR assigned
   RESOLVED
   REJECTED
 }

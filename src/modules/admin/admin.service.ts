@@ -1,7 +1,6 @@
-
 import { prisma } from "../../lib/prisma";
 import { AppError } from "../../utils/AppError";
-import httpStatus from 'http-status';
+import httpStatus from "http-status";
 
 const updateUserStatus = async (
     id: string,
@@ -19,32 +18,52 @@ const updateUserStatus = async (
         );
     }
 
-    const result = await prisma.user.update({
-        where: { id },
-        data: {
-            isActive
-        },
-        select: {
-            id: true,
-            name: true,
-            email: true,
-            role: true,
-            isActive: true,
-            updatedAt: true
-        }
-    });
+    if (user.id === adminId) {
+        throw new AppError(
+            httpStatus.BAD_REQUEST,
+            "You cannot change your own account status"
+        );
+    }
 
-    await prisma.auditLog.create({
-        data: {
-            adminId: adminId,
-            action: isActive ? "ACTIVATE_USER" : "BLOCK_USER",
-            resource: "USER",
-            resourceId: id,
-            details: {
-                previousStatus: user.isActive,
-                newStatus: isActive,
+    if (user.isActive === isActive) {
+        throw new AppError(
+            httpStatus.CONFLICT,
+            isActive
+                ? "User is already active"
+                : "User is already blocked"
+        );
+    }
+
+    const result = await prisma.$transaction(async (tx) => {
+        const updatedUser = await tx.user.update({
+            where: { id },
+            data: {
+                isActive
             },
-        },
+            select: {
+                id: true,
+                name: true,
+                email: true,
+                role: true,
+                isActive: true,
+                updatedAt: true
+            }
+        });
+
+        await tx.auditLog.create({
+            data: {
+                adminId,
+                action: isActive ? "ACTIVATE_USER" : "BLOCK_USER",
+                resource: "USER",
+                resourceId: id,
+                details: {
+                    previousStatus: user.isActive,
+                    newStatus: isActive,
+                },
+            },
+        });
+
+        return updatedUser;
     });
 
     return result;

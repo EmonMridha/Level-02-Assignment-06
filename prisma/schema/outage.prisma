@@ -18,7 +18,7 @@ model Outage {
     createdById String
     createdBy   User   @relation("CreatedOutages", fields: [createdById], references: [id])
 
-    // Technician assignment
+    // OPERATOR assignment
     assignedToId String?
     assignedTo   User?     @relation("AssignedOutages", fields: [assignedToId], references: [id])
     assignedAt   DateTime?

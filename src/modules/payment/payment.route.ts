@@ -6,8 +6,8 @@ import { verifyPaymentSchema } from "./payment.validation";
 
 const router = Router();
 
-router.post('/checkout', auth('CUSTOMER', 'ADMIN', 'OPERATOR'), paymentController.createCheckoutSession)
+router.post('/checkout', auth('CUSTOMER', 'ADMIN', 'TECHNICIAN'), paymentController.createCheckoutSession)
 
-router.post('/verify', validateRequest(verifyPaymentSchema), auth('CUSTOMER', 'ADMIN', 'OPERATOR'), paymentController.verifyPayment)
+router.post('/verify', validateRequest(verifyPaymentSchema), auth('CUSTOMER', 'ADMIN', 'TECHNICIAN'), paymentController.verifyPayment)
 
 export const paymentRoutes = router
