@@ -40,7 +40,6 @@ app.use('/api/v1/complaint', complaintRoutes)
 app.use('/api/v1/payment', paymentRoutes)
 app.use('/api/v1/notification', notificationRoutes)
 app.use('/api/v1/admin', adminRoutes)
-
 app.use(globalErrorHandler)
 
 export default app;

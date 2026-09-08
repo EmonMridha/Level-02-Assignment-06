@@ -4,6 +4,7 @@ import { adminService } from "./admin.service";
 import { sendResponse } from "../../utils/SendResponse";
 import httpStatus from 'http-status'
 
+
 const updateUserStatus = catchAsync(async (req: Request, res: Response) => {
     const { id } = req.params;
     const { isActive } = req.body;
@@ -23,6 +24,18 @@ const updateUserStatus = catchAsync(async (req: Request, res: Response) => {
     });
 });
 
+const getAllUsers = catchAsync(async (req: Request, res: Response) => {
+    const result = await adminService.getAllUsers();
+
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: "Users fetched successfully",
+        data: result,
+    });
+});
+
 export const adminController = {
     updateUserStatus,
+    getAllUsers
 };

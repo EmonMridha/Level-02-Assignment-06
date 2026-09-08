@@ -1,3 +1,5 @@
+import { Prisma } from "../../../generated/prisma/client";
+import { Role } from "../../../generated/prisma/enums";
 import { prisma } from "../../lib/prisma";
 import { AppError } from "../../utils/AppError";
 import httpStatus from 'http-status';
@@ -35,6 +37,27 @@ const updateUserStatus = async (
     return result;
 };
 
+const getAllUsers = async () => {
+    const result = await prisma.user.findMany({
+        select: {
+            id: true,
+            name: true,
+            email: true,
+            phone: true,
+            role: true,
+            isActive: true,
+            createdAt: true,
+            updatedAt: true,
+        },
+        orderBy: {
+            createdAt: "desc",
+        },
+    });
+
+    return result;
+};
+
 export const adminService = {
-    updateUserStatus
+    updateUserStatus,
+    getAllUsers
 };

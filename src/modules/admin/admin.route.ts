@@ -9,5 +9,8 @@ const router = Router();
 
 router.patch('/:id/status', auth('ADMIN', 'CUSTOMER', 'OPERATOR'), validateRequest(updateUserStatusSchema), adminController.updateUserStatus)
 
+router.get("/users", auth('ADMIN'), adminController.getAllUsers
+);
+
 
 export const adminRoutes = router
