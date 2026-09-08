@@ -1,12 +1,12 @@
-import { Prisma } from "../../../generated/prisma/client";
-import { Role } from "../../../generated/prisma/enums";
+
 import { prisma } from "../../lib/prisma";
 import { AppError } from "../../utils/AppError";
 import httpStatus from 'http-status';
 
 const updateUserStatus = async (
     id: string,
-    isActive: boolean
+    isActive: boolean,
+    adminId: string
 ) => {
     const user = await prisma.user.findUnique({
         where: { id }
@@ -32,6 +32,19 @@ const updateUserStatus = async (
             isActive: true,
             updatedAt: true
         }
+    });
+
+    await prisma.auditLog.create({
+        data: {
+            adminId: adminId,
+            action: isActive ? "ACTIVATE_USER" : "BLOCK_USER",
+            resource: "USER",
+            resourceId: id,
+            details: {
+                previousStatus: user.isActive,
+                newStatus: isActive,
+            },
+        },
     });
 
     return result;

@@ -8,10 +8,12 @@ import httpStatus from 'http-status'
 const updateUserStatus = catchAsync(async (req: Request, res: Response) => {
     const { id } = req.params;
     const { isActive } = req.body;
+    const adminId = req.user?.userId;
 
     const result = await adminService.updateUserStatus(
         id as string,
-        isActive
+        isActive,
+        adminId as string
     );
 
     sendResponse(res, {

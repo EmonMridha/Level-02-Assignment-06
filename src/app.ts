@@ -11,6 +11,7 @@ import { outageRoutes } from "./modules/outage/outage.route";
 import { complaintRoutes } from "./modules/complaint/complaint.route";
 import { paymentRoutes } from "./modules/payment/payment.route"; import { notificationRoutes } from "./modules/notification/notification.route";
 import { adminRoutes } from "./modules/admin/admin.route";
+import { auditLogRoutes } from "./modules/audit/audit.route";
 
 const app: Application = express()
 
@@ -40,6 +41,7 @@ app.use('/api/v1/complaint', complaintRoutes)
 app.use('/api/v1/payment', paymentRoutes)
 app.use('/api/v1/notification', notificationRoutes)
 app.use('/api/v1/admin', adminRoutes)
+app.use('/api/v1/auditLog', auditLogRoutes)
 app.use(globalErrorHandler)
 
 export default app;
