@@ -37,6 +37,7 @@ app.use('/api/v1/zone', zoneRoutes)
 app.use('/api/v1/outage', outageRoutes)
 app.use('/api/v1/complaint', complaintRoutes)
 app.use('/api/v1/payment', paymentRoutes)
+app.use('/api/v1/notification', paymentRoutes)
 
 app.use(globalErrorHandler)
 
