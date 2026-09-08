@@ -4,6 +4,19 @@ import { notificationService } from "./notification.service";
 import { sendResponse } from "../../utils/SendResponse";
 import httpStatus from 'http-status'
 
+const createNotification = catchAsync(async (req: Request, res: Response) => {
+    const payload = req.body;
+
+    const result = await notificationService.createNotification(payload)
+
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: "Notification created successfully",
+        data: result
+    });
+})
+
 const getNotification = catchAsync(async (req: Request, res:
     Response) => {
 
@@ -12,7 +25,7 @@ const getNotification = catchAsync(async (req: Request, res:
     sendResponse(res, {
         statusCode: httpStatus.OK,
         success: true,
-        message: "Complaint updated successfully",
+        message: "Notifications retrieved successfully",
         data: result
     });
 })
@@ -45,6 +58,7 @@ const markAllAsRead = catchAsync(async (req: Request, res: Response) => {
 });
 
 export const notificationController = {
+    createNotification,
     getNotification,
     markAsRead,
     markAllAsRead

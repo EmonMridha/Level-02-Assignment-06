@@ -1,13 +1,18 @@
 import { prisma } from "../../lib/prisma"
 import { AppError } from "../../utils/AppError";
 import httpStatus from 'http-status'
+import { ICreateNotification } from "./notification.interface";
 
-const createNotification = async (userId: string, message: string) => {
+const createNotification = async (payload: ICreateNotification) => {
+    const { userId, title, message, type, metadata } = payload;
+
     const result = await prisma.notification.create({
         data: {
             userId,
+            title,
             message,
-            isRead: false
+            type,
+            metadata,
         }
     });
 
@@ -58,6 +63,13 @@ const markAllAsRead = async (userId: string) => {
             isRead: true
         }
     });
+
+    if (result.count === 0) {
+        throw new AppError(
+            httpStatus.NOT_FOUND,
+            "No unread notifications found"
+        );
+    }
 
     return result;
 };

@@ -9,7 +9,7 @@ import { globalErrorHandler } from "./middleware/globalErrorHandler";
 import { zoneRoutes } from "./modules/zones/zone.route";
 import { outageRoutes } from "./modules/outage/outage.route";
 import { complaintRoutes } from "./modules/complaint/complaint.route";
-import { paymentRoutes } from "./modules/payment/payment.route";
+import { paymentRoutes } from "./modules/payment/payment.route"; import { notificationRoutes } from "./modules/notification/notification.route";
 
 const app: Application = express()
 
@@ -37,7 +37,7 @@ app.use('/api/v1/zone', zoneRoutes)
 app.use('/api/v1/outage', outageRoutes)
 app.use('/api/v1/complaint', complaintRoutes)
 app.use('/api/v1/payment', paymentRoutes)
-app.use('/api/v1/notification', paymentRoutes)
+app.use('/api/v1/notification', notificationRoutes)
 
 app.use(globalErrorHandler)
 

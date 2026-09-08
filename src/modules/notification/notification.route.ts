@@ -1,8 +1,12 @@
 import { Router } from "express";
 import { notificationController } from "./notification.controller";
 import { auth } from "../../middleware/checkAuth";
+import { validateRequest } from "../../middleware/validateRequest";
+import { createNotificationSchema } from "./notification.validate";
 
 const router = Router();
+
+router.post('/', auth('ADMIN'), validateRequest(createNotificationSchema), notificationController.createNotification)
 
 router.get('/', notificationController.getNotification)
 
